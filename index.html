@@ -96,7 +96,7 @@
     </div>
 
     <!-- Control Panel -->
-    <div class="control-panel mt-8 bg-slate-900/95 p-6 rounded-2xl border border-white/10 w-full max-w-md text-white">
+    <div class="control-panel mt-8 bg-slate-900/95 p-6 border-white/10 w-full max-w-md text-white">
         
         <div class="mb-6 space-y-3 bg-white/5 p-4 rounded-xl border border-white/5">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Match Settings</p>
@@ -144,7 +144,7 @@
         </div>
 
         <div class="mt-4 text-[9px] text-slate-500 text-center uppercase tracking-widest">
-            Cloud Sync Active | Keys: A/S (H), K/L (A), Q/W (Serve), N (Next Set)
+            Cloud Sync Active | Keys: Q/A (H), W/S (A), 1/2 (Serve), N (Next Set)
         </div>
     </div>
 
@@ -176,9 +176,9 @@
             currentSet: 1,
             server: 0,
             matchFinished: false,
-            matchTitle: "Match Live",
-            team1Name: "NAVY TEAM",
-            team2Name: "OPPONENTS"
+            matchTitle: "EASYLEAGUE BERN-SOLOTHURN MIXED II",
+            team1Name: "HOME",
+            team2Name: "AWAY"
         };
 
         let user = null;
@@ -285,9 +285,9 @@
                 currentSet: 1,
                 server: 0,
                 matchFinished: false,
-                matchTitle: "Match Live",
-                team1Name: "NAVY TEAM",
-                team2Name: "OPPONENTS"
+                matchTitle: "EASYLEAGUE BERN-SOLOTHURN MIXED II",
+                team1Name: "HOME",
+                team2Name: "AWAY"
             };
             updateDisplay();
             syncInputFields();
@@ -340,15 +340,16 @@
         window.addEventListener('keydown', (e) => {
             if (document.activeElement.tagName === 'INPUT') return;
             const key = e.key.toLowerCase();
-            if (key === 'a') changeScore(1, 1);
-            if (key === 's') changeScore(1, -1);
-            if (key === 'k') changeScore(2, 1);
-            if (key === 'l') changeScore(2, -1);
-            if (key === 'q') toggleService(1);
-            if (key === 'w') toggleService(2);
+            if (key === 'q') changeScore(1, 1);
+            if (key === 'a') changeScore(1, -1);
+            if (key === 'w') changeScore(2, 1);
+            if (key === 's') changeScore(2, -1);
+            if (key === '1') toggleService(1);
+            if (key === '2') toggleService(2);
             if (key === 'n') nextSet();
             if (key === 'o') toggleOverlay();
         });
     </script>
 </body>
 </html>
+
