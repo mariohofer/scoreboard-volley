@@ -154,12 +154,14 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Firebase Configuration from Environment
+        // Firebase Configuration
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'vball-default';
+        
+        // Ensure a consistent App ID for synchronization
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'vball-global-sync-v1';
 
         let state = {
             score1: 0,
@@ -179,16 +181,21 @@
 
         // AUTHENTICATION (RULE 3)
         const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth failed:", err);
             }
         };
 
         onAuthStateChanged(auth, (u) => {
             user = u;
             if (user) {
+                console.log("Authenticated as:", user.uid);
                 setupRealtimeSync();
             }
         });
@@ -197,27 +204,31 @@
 
         // FIRESTORE SYNC (RULE 1 & 2)
         function setupRealtimeSync() {
-            // FIXED: Path must have 6 segments: artifacts/{appId}/public/data/scoreboard/main
+            // Path: artifacts/{appId}/public/data/scoreboard/main (6 segments)
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main');
             
+            // Listen for changes
             onSnapshot(docRef, (snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.data();
                     state = { ...state, ...data };
                     syncInputFields();
                     updateDisplay();
+                } else {
+                    // Initialize document if it doesn't exist
+                    pushState();
                 }
             }, (error) => {
-                console.error("Firestore error:", error);
+                console.error("Firestore sync error:", error);
             });
         }
 
         async function pushState() {
             if (!user) return;
-            // FIXED: Path must have 6 segments: artifacts/{appId}/public/data/scoreboard/main
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main');
             try {
-                await setDoc(docRef, state, { merge: true });
+                // Ensure state is a plain object
+                await setDoc(docRef, { ...state }, { merge: true });
             } catch (e) {
                 console.error("Error pushing state:", e);
             }
@@ -237,9 +248,9 @@
             const iT1 = document.getElementById('inputTeam1');
             const iT2 = document.getElementById('inputTeam2');
 
-            if (document.activeElement !== iTitle) iTitle.value = state.matchTitle;
-            if (document.activeElement !== iT1) iT1.value = state.team1Name;
-            if (document.activeElement !== iT2) iT2.value = state.team2Name;
+            if (iTitle && document.activeElement !== iTitle) iTitle.value = state.matchTitle;
+            if (iT1 && document.activeElement !== iT1) iT1.value = state.team1Name;
+            if (iT2 && document.activeElement !== iT2) iT2.value = state.team2Name;
         }
 
         function updateDisplay() {
@@ -251,15 +262,18 @@
             const setInfo = document.getElementById('setInfo');
             const scoringControls = document.getElementById('scoringControls');
             
+            if (!s1 || !s2) return;
+
             document.getElementById('displayMatchTitle').innerText = state.matchTitle;
             document.getElementById('displayTeam1').innerText = state.team1Name;
             document.getElementById('displayTeam2').innerText = state.team2Name;
 
-            if(s1.innerText != state.score1.toString().padStart(2, '0')) { 
+            // Trigger animations if scores changed
+            if(s1.innerText !== state.score1.toString().padStart(2, '0')) { 
                 pb1.classList.add('point-change'); 
                 setTimeout(() => pb1.classList.remove('point-change'), 300); 
             }
-            if(s2.innerText != state.score2.toString().padStart(2, '0')) { 
+            if(s2.innerText !== state.score2.toString().padStart(2, '0')) { 
                 pb2.classList.add('point-change'); 
                 setTimeout(() => pb2.classList.remove('point-change'), 300); 
             }
@@ -302,14 +316,11 @@
                 if (state.sets1 === 3 || state.sets2 === 3) {
                     state.matchFinished = true;
                 } else {
-                    setTimeout(() => {
-                        state.score1 = 0;
-                        state.score2 = 0;
-                        state.currentSet++;
-                        state.server = 0;
-                        pushState();
-                    }, 1500);
-                    return;
+                    // Clear scores for next set
+                    state.score1 = 0;
+                    state.score2 = 0;
+                    state.currentSet++;
+                    state.server = 0;
                 }
             }
             pushState();
@@ -351,14 +362,16 @@
 
         window.resetMatch = function() {
             state = {
-                ...state,
                 score1: 0,
                 score2: 0,
                 sets1: 0,
                 sets2: 0,
                 currentSet: 1,
                 server: 0,
-                matchFinished: false
+                matchFinished: false,
+                matchTitle: "Match Live",
+                team1Name: "NAVY TEAM",
+                team2Name: "OPPONENTS"
             };
             pushState();
         };
