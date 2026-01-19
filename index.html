@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Volleyball Scoreboard - Stacked Navy</title>
+    <title>Pro Volleyball Scoreboard - XL Navy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: transparent;
-            overflow: hidden;
+            overflow-x: hidden;
         }
         .score-font {
             font-family: 'JetBrains Mono', monospace;
@@ -27,134 +27,117 @@
             background: transparent !important; 
             border: none !important;
             box-shadow: none !important;
+            margin-top: 20px;
         }
         
         .navy-bg { background-color: var(--navy-dark); }
         .navy-accent { background-color: var(--navy-medium); }
 
-        /* Animation for point changes */
-        @keyframes point-pop {
-            0% { transform: scale(1); background-color: var(--navy-medium); }
-            50% { transform: scale(1.05); background-color: #1e3a8a; }
-            100% { transform: scale(1); background-color: var(--navy-medium); }
-        }
-        .point-change {
-            animation: point-pop 0.3s ease-out;
-        }
-
         .service-dot {
             transition: all 0.3s ease;
-            box-shadow: 0 0 0px var(--gold);
         }
         .serving {
             background-color: var(--gold) !important;
-            box-shadow: 0 0 12px var(--gold);
+            box-shadow: 0 0 20px var(--gold);
         }
     </style>
 </head>
-<body class="p-6 flex flex-col items-center justify-start min-h-screen">
+<body class="p-4 flex flex-col items-center justify-start min-h-screen">
 
-    <!-- Stacked Scoreboard Wrapper -->
-    <div id="mainWrapper" class="main-wrapper w-full max-w-md shadow-2xl transition-all duration-500">
+    <div id="mainWrapper" class="main-wrapper w-full max-w-5xl shadow-2xl transition-all duration-500 rounded-lg overflow-hidden">
         
-        <!-- Header: Match Info & Set -->
-        <div class="navy-bg border-b border-white/10 px-4 py-2 flex justify-between items-center">
-            <span id="displayMatchTitle" class="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Match Live</span>
-            <div class="flex items-center gap-2">
-                <span id="setLabel" class="text-[10px] font-black text-yellow-500 uppercase">Set</span>
-                <span id="setInfo" class="text-white font-black text-sm">1</span>
+        <div class="navy-bg border-b border-white/10 px-8 py-4 flex justify-between items-center">
+            <span id="displayMatchTitle" class="text-xl font-black text-white/60 uppercase tracking-[0.3em]">Match Live</span>
+            <div class="flex items-center gap-4">
+                <span id="setLabel" class="text-xl font-black text-yellow-500 uppercase">Set</span>
+                <span id="setInfo" class="text-white font-black text-3xl">1</span>
             </div>
         </div>
 
-        <!-- Team 1 Row -->
         <div class="navy-bg flex items-center border-b border-white/5 relative">
-            <div class="flex-1 px-4">
-                <div id="displayTeam1" class="text-white text-lg font-bold uppercase tracking-tight truncate">NAVY TEAM</div>
+            <div class="flex-1 px-8">
+                <div id="displayTeam1" class="text-white text-5xl font-extrabold uppercase tracking-tighter truncate">NAVY TEAM</div>
             </div>
-            <div class="w-14 h-14 flex items-center justify-center border-l border-white/5 navy-accent">
-                <span id="sets1" class="text-yellow-500 font-black text-xl">0</span>
+            <div class="w-32 h-32 flex items-center justify-center border-l border-white/10 navy-accent">
+                <span id="sets1" class="text-yellow-500 font-black text-6xl">0</span>
             </div>
-            <div id="pointBox1" class="w-20 h-14 flex items-center justify-center border-l border-white/5 navy-accent relative">
-                <span id="score1" class="score-font text-3xl font-black text-white">00</span>
-                <div id="service1" class="service-dot absolute right-1 top-1 w-2 h-2 rounded-full bg-white/5"></div>
+            <div id="pointBox1" class="w-56 h-32 flex items-center justify-center border-l border-white/10 navy-accent relative">
+                <span id="score1" class="score-font text-8xl font-black text-white">00</span>
+                <div id="service1" class="service-dot absolute right-3 top-3 w-5 h-5 rounded-full bg-white/5"></div>
             </div>
         </div>
 
-        <!-- Team 2 Row -->
-        <div class="navy-bg flex items-center overflow-hidden">
-            <div class="flex-1 px-4">
-                <div id="displayTeam2" class="text-white text-lg font-bold uppercase tracking-tight truncate">OPPONENTS</div>
+        <div class="navy-bg flex items-center relative">
+            <div class="flex-1 px-8">
+                <div id="displayTeam2" class="text-white text-5xl font-extrabold uppercase tracking-tighter truncate">OPPONENTS</div>
             </div>
-            <div class="w-14 h-14 flex items-center justify-center border-l border-white/5 navy-accent">
-                <span id="sets2" class="text-yellow-500 font-black text-xl">0</span>
+            <div class="w-32 h-32 flex items-center justify-center border-l border-white/10 navy-accent">
+                <span id="sets2" class="text-yellow-500 font-black text-6xl">0</span>
             </div>
-            <div id="pointBox2" class="w-20 h-14 flex items-center justify-center border-l border-white/5 navy-accent relative">
-                <span id="score2" class="score-font text-3xl font-black text-white">00</span>
-                <div id="service2" class="service-dot absolute right-1 top-1 w-2 h-2 rounded-full bg-white/5"></div>
+            <div id="pointBox2" class="w-56 h-32 flex items-center justify-center border-l border-white/10 navy-accent relative">
+                <span id="score2" class="score-font text-8xl font-black text-white">00</span>
+                <div id="service2" class="service-dot absolute right-3 top-3 w-5 h-5 rounded-full bg-white/5"></div>
             </div>
         </div>
     </div>
 
-    <!-- Control Panel -->
-    <div class="control-panel mt-8 bg-slate-900/95 p-6 border-white/10 w-full max-w-md text-white">
+    <div class="control-panel mt-12 bg-slate-900/95 p-8 border border-white/10 w-full max-w-2xl rounded-2xl text-white shadow-2xl">
         
-        <div class="mb-6 space-y-3 bg-white/5 p-4 rounded-xl border border-white/5">
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Match Settings</p>
+        <div class="mb-6 space-y-4 bg-white/5 p-6 rounded-xl border border-white/10">
+            <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Match Configuration</p>
             <div>
-                <label class="text-[9px] text-slate-500 uppercase block mb-1">Match Title</label>
-                <input type="text" id="inputMatchTitle" placeholder="Match Live" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                <label class="text-[10px] text-slate-500 uppercase block mb-1">Match Title</label>
+                <input type="text" id="inputMatchTitle" placeholder="Match Live" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 1 Name</label>
-                    <input type="text" id="inputTeam1" placeholder="NAVY TEAM" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                    <label class="text-[10px] text-slate-500 uppercase block mb-1">Team 1 Name</label>
+                    <input type="text" id="inputTeam1" placeholder="NAVY TEAM" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 2 Name</label>
-                    <input type="text" id="inputTeam2" placeholder="OPPONENTS" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                    <label class="text-[10px] text-slate-500 uppercase block mb-1">Team 2 Name</label>
+                    <input type="text" id="inputTeam2" placeholder="OPPONENTS" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
         </div>
 
-        <div id="scoringControls" class="grid grid-cols-2 gap-4 mb-4">
-            <div class="space-y-2">
-                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Home</p>
-                <div class="flex gap-1">
-                    <button onclick="changeScore(1, 1)" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button>
-                    <button onclick="changeScore(1, -1)" class="bg-slate-800 px-3 rounded-lg">-</button>
+        <div id="scoringControls" class="grid grid-cols-2 gap-6 mb-6">
+            <div class="space-y-3">
+                <p class="text-xs font-bold text-slate-400 uppercase text-center tracking-widest">Home Controls</p>
+                <div class="flex gap-2">
+                    <button onclick="changeScore(1, 1)" class="bg-blue-600 hover:bg-blue-500 flex-1 py-4 rounded-xl font-bold text-xl shadow-lg">Pt +</button>
+                    <button onclick="changeScore(1, -1)" class="bg-slate-800 hover:bg-slate-700 px-6 rounded-xl text-xl">-</button>
                 </div>
-                <button onclick="toggleService(1)" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button>
+                <button onclick="toggleService(1)" class="w-full py-3 text-xs border border-yellow-500/30 rounded-xl text-yellow-500 uppercase font-black hover:bg-yellow-500/10 transition-all">Service</button>
             </div>
-            <div class="space-y-2">
-                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Away</p>
-                <div class="flex gap-1">
-                    <button onclick="changeScore(2, 1)" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button>
-                    <button onclick="changeScore(2, -1)" class="bg-slate-800 px-3 rounded-lg">-</button>
+            <div class="space-y-3">
+                <p class="text-xs font-bold text-slate-400 uppercase text-center tracking-widest">Away Controls</p>
+                <div class="flex gap-2">
+                    <button onclick="changeScore(2, 1)" class="bg-blue-600 hover:bg-blue-500 flex-1 py-4 rounded-xl font-bold text-xl shadow-lg">Pt +</button>
+                    <button onclick="changeScore(2, -1)" class="bg-slate-800 hover:bg-slate-700 px-6 rounded-xl text-xl">-</button>
                 </div>
-                <button onclick="toggleService(2)" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button>
+                <button onclick="toggleService(2)" class="w-full py-3 text-xs border border-yellow-500/30 rounded-xl text-yellow-500 uppercase font-black hover:bg-yellow-500/10 transition-all">Service</button>
             </div>
         </div>
 
-        <div class="flex flex-col gap-2 pt-4 border-t border-white/5">
-            <div class="flex gap-2">
-                <button onclick="nextSet()" class="flex-1 bg-yellow-600 hover:bg-yellow-500 py-2 rounded-lg font-bold text-xs uppercase">Manual Next Set</button>
-                <button onclick="toggleOverlay()" id="overlayBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 py-2 rounded-lg font-bold text-xs uppercase">OBS Mode</button>
+        <div class="flex flex-col gap-3 pt-6 border-t border-white/10">
+            <div class="flex gap-3">
+                <button onclick="nextSet()" class="flex-1 bg-yellow-600 hover:bg-yellow-500 py-3 rounded-xl font-black text-sm uppercase tracking-tighter">End Current Set</button>
+                <button onclick="toggleOverlay()" id="overlayBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-black text-sm uppercase tracking-tighter">Enter OBS Mode</button>
             </div>
-            <button onclick="resetMatch()" class="bg-red-900/40 hover:bg-red-900/60 text-white text-[10px] uppercase font-bold py-2 rounded-lg transition-colors mt-2">Reset Match</button>
+            <button onclick="resetMatch()" class="bg-red-900/40 hover:bg-red-600/60 text-white text-[10px] uppercase font-black py-3 rounded-xl transition-all mt-2 tracking-widest">Hard Reset Match</button>
         </div>
 
-        <div class="mt-4 text-[9px] text-slate-500 text-center uppercase tracking-widest">
-            Cloud Sync Active | Keys: Q/A (H), W/S (A), 1/2 (Serve), N (Next Set)
+        <div class="mt-6 text-[10px] text-slate-500 text-center uppercase tracking-[0.2em] font-medium">
+            Hotkeys: Q/A (H) • W/S (A) • 1/2 (Serve) • N (Set) • O (OBS)
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // --- YOUR ACTUAL FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyCmz-qcfH3SY7GTEv1PZo2IwpmWHRnyC0c",
             authDomain: "volley-scoreboard-5d345.firebaseapp.com",
@@ -164,46 +147,31 @@
             appId: "1:1026855018988:web:d5236fcf4e347bea73e0c9"
         };
 
-        // Unique ID for the match data in your database
         const appId = "match-001";
-
-        // --- GLOBAL STATE ---
         let state = {
-            score1: 0,
-            score2: 0,
-            sets1: 0,
-            sets2: 0,
-            currentSet: 1,
-            server: 0,
-            matchFinished: false,
+            score1: 0, score2: 0, sets1: 0, sets2: 0,
+            currentSet: 1, server: 0, matchFinished: false,
             matchTitle: "EASYLEAGUE BERN-SOLOTHURN MIXED II",
-            team1Name: "HOME",
-            team2Name: "AWAY"
+            team1Name: "HOME", team2Name: "AWAY"
         };
 
         let user = null;
         let isOverlay = false;
         
-        // Initialize App
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // UI immediately starts
         updateDisplay();
 
-        // Auth Logic
         onAuthStateChanged(auth, (u) => {
             user = u;
             if (user) setupRealtimeSync();
         });
 
         const startApp = async () => {
-            try {
-                await signInAnonymously(auth);
-            } catch (e) {
-                console.error("Auth failed. Ensure 'Anonymous' provider is enabled in Firebase Console.", e);
-            }
+            try { await signInAnonymously(auth); } 
+            catch (e) { console.error("Auth failed", e); }
         };
         startApp();
 
@@ -214,23 +182,17 @@
                     state = { ...state, ...snapshot.data() };
                     syncInputFields();
                     updateDisplay();
-                } else {
-                    pushState();
-                }
-            }, (error) => {
-                console.error("Sync Error. Check Firestore Rules:", error);
+                } else { pushState(); }
             });
         }
 
         async function pushState() {
             if (!user) return;
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main');
-            try {
-                await setDoc(docRef, state, { merge: true });
-            } catch (e) { console.error("Push Error:", e); }
+            try { await setDoc(docRef, state, { merge: true }); } 
+            catch (e) { console.error("Push Error:", e); }
         }
 
-        // --- UI FUNCTIONS ---
         window.pushSettings = function() {
             state.matchTitle = document.getElementById('inputMatchTitle').value || "Match Live";
             state.team1Name = document.getElementById('inputTeam1').value || "NAVY TEAM";
@@ -278,16 +240,10 @@
 
         window.resetMatch = function() {
             state = {
-                score1: 0,
-                score2: 0,
-                sets1: 0,
-                sets2: 0,
-                currentSet: 1,
-                server: 0,
-                matchFinished: false,
+                score1: 0, score2: 0, sets1: 0, sets2: 0,
+                currentSet: 1, server: 0, matchFinished: false,
                 matchTitle: "EASYLEAGUE BERN-SOLOTHURN MIXED II",
-                team1Name: "HOME",
-                team2Name: "AWAY"
+                team1Name: "HOME", team2Name: "AWAY"
             };
             updateDisplay();
             syncInputFields();
@@ -297,7 +253,7 @@
         window.toggleOverlay = function() {
             isOverlay = !isOverlay;
             document.body.classList.toggle('overlay-mode', isOverlay);
-            document.getElementById('overlayBtn').innerText = isOverlay ? "Exit OBS Mode" : "OBS Mode";
+            document.getElementById('overlayBtn').innerText = isOverlay ? "Exit OBS Mode" : "Enter OBS Mode";
         };
 
         function syncInputFields() {
@@ -333,8 +289,8 @@
                 setInfo.innerText = state.currentSet;
             }
             
-            document.getElementById('service1').className = `service-dot absolute right-1 top-1 w-2 h-2 rounded-full ${state.server === 1 ? 'serving' : 'bg-white/5'}`;
-            document.getElementById('service2').className = `service-dot absolute right-1 top-1 w-2 h-2 rounded-full ${state.server === 2 ? 'serving' : 'bg-white/5'}`;
+            document.getElementById('service1').className = `service-dot absolute right-3 top-3 w-5 h-5 rounded-full ${state.server === 1 ? 'serving' : 'bg-white/5'}`;
+            document.getElementById('service2').className = `service-dot absolute right-3 top-3 w-5 h-5 rounded-full ${state.server === 2 ? 'serving' : 'bg-white/5'}`;
         }
 
         window.addEventListener('keydown', (e) => {
@@ -352,5 +308,3 @@
     </script>
 </body>
 </html>
-
-
