@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Volleyball Scoreboard - Protected</title>
+    <title>Pro Volleyball Scoreboard - Admin Protected</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -14,7 +14,7 @@
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #020617; 
+            background-color: transparent; 
             min-height: 100vh;
         }
         
@@ -23,6 +23,7 @@
             font-weight: 700;
             font-variant-numeric: tabular-nums;
             letter-spacing: -0.02em;
+            line-height: 1;
         }
 
         .team-name-display {
@@ -49,297 +50,335 @@
             font-weight: 900;
         }
 
+        /* Admin Modal Styling */
+        .admin-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Tablet/Desktop: Large Scoreboard */
         @media (min-width: 768px) {
             .main-wrapper { max-width: 54rem; } 
             .team-name-display { font-size: 3.5rem; } 
-            .score-cell { width: 9rem; height: 7.5rem; }
-            .set-cell { width: 5.5rem; height: 7.5rem; }
+            .score-cell { width: 9rem; height: 7.5rem; } 
+            .set-cell { width: 5.5rem; height: 7.5rem; } 
             .score-font { font-size: 5rem; } 
-            .set-score { font-size: 3rem; }
-            .service-dot { width: 1.5rem; height: 1.5rem; margin-left: 1.5rem; }
-        }
+            .set-score { font-size: 3rem; } 
+            .service-dot { width: 1.5rem; height: 1.5rem; margin-left: 1.5rem; } 
+        } 
 
+        /* Mobile: Compact */
         @media (max-width: 767px) {
-            .main-wrapper { max-width: 100%; }
-            .team-name-display { font-size: 1.5rem; }
-            .score-cell { width: 4.5rem; height: 4.5rem; }
-            .set-cell { width: 3rem; height: 4.5rem; }
-            .score-font { font-size: 2.25rem; }
-            .set-score { font-size: 1.5rem; }
-            .service-dot { width: 0.75rem; height: 0.75rem; margin-left: 0.75rem; }
-        }
-
-        .hidden-panel { display: none !important; }
+            .main-wrapper { max-width: 100%; } 
+            .team-name-display { font-size: 1.5rem; } 
+            .score-cell { width: 4.5rem; height: 4.5rem; } 
+            .set-cell { width: 3rem; height: 4.5rem; } 
+            .score-font { font-size: 2.25rem; } 
+            .set-score { font-size: 1.5rem; } 
+            .service-dot { width: 0.75rem; height: 0.75rem; margin-left: 0.75rem; } 
+        } 
     </style>
 </head>
-<body class="p-4 md:p-6 flex flex-col items-center justify-start">
+<body class="p-4 md:p-6 flex flex-col items-center justify-start"> 
 
     <!-- Scoreboard Display -->
-    <div id="mainWrapper" class="main-wrapper w-full shadow-2xl rounded-2xl overflow-hidden mb-8 border border-white/10">
-        <!-- Team 1 Row -->
-        <div class="navy-bg flex items-center border-b border-white/10 relative">
-            <div class="flex-1 px-4 md:px-6 py-2 md:py-4 flex items-center overflow-hidden">
-                <div id="displayTeam1" class="text-white team-name-display uppercase truncate">HOME</div>
-                <div id="service1" class="service-dot rounded-full bg-white/5"></div>
-            </div>
-            <div class="set-cell flex items-center justify-center border-l border-white/10 navy-accent">
-                <span id="sets1" class="set-score">0</span>
-            </div>
-            <div id="pointBox1" class="score-cell flex items-center justify-center border-l border-white/10 navy-accent">
-                <span id="score1" class="score-font text-white">0</span>
-            </div>
-        </div>
+    <div id="mainWrapper" class="main-wrapper w-full shadow-2xl rounded-2xl overflow-hidden mb-8 border border-white/10"> 
+        <!-- Team 1 Row --> 
+        <div class="navy-bg flex items-center border-b border-white/10 relative"> 
+            <div class="flex-1 px-4 md:px-6 py-2 md:py-4 flex items-center overflow-hidden"> 
+                <div id="displayTeam1" class="text-white team-name-display uppercase truncate">HOME</div> 
+                <div id="service1" class="service-dot rounded-full bg-white/5"></div> 
+            </div> 
+            <div class="set-cell flex items-center justify-center border-l border-white/10 navy-accent"> 
+                <span id="sets1" class="set-score">0</span> 
+            </div> 
+            <div id="pointBox1" class="score-cell flex items-center justify-center border-l border-white/10 navy-accent"> 
+                <span id="score1" class="score-font text-white">0</span> 
+            </div> 
+        </div> 
 
-        <!-- Team 2 Row -->
-        <div class="navy-bg flex items-center relative">
-            <div class="flex-1 px-4 md:px-6 py-2 md:py-4 flex items-center overflow-hidden">
-                <div id="displayTeam2" class="text-white team-name-display uppercase truncate">AWAY</div>
-                <div id="service2" class="service-dot rounded-full bg-white/5"></div>
-            </div>
-            <div class="set-cell flex items-center justify-center border-l border-white/10 navy-accent">
-                <span id="sets2" class="set-score">0</span>
-            </div>
-            <div id="pointBox2" class="score-cell flex items-center justify-center border-l border-white/10 navy-accent">
-                <span id="score2" class="score-font text-white">0</span>
-            </div>
-        </div>
-    </div>
+        <!-- Team 2 Row --> 
+        <div class="navy-bg flex items-center relative"> 
+            <div class="flex-1 px-4 md:px-6 py-2 md:py-4 flex items-center overflow-hidden"> 
+                <div id="displayTeam2" class="text-white team-name-display uppercase truncate">AWAY</div> 
+                <div id="service2" class="service-dot rounded-full bg-white/5"></div> 
+            </div> 
+            <div class="set-cell flex items-center justify-center border-l border-white/10 navy-accent"> 
+                <span id="sets2" class="set-score">0</span> 
+            </div> 
+            <div id="pointBox2" class="score-cell flex items-center justify-center border-l border-white/10 navy-accent"> 
+                <span id="score2" class="score-font text-white">0</span> 
+            </div> 
+        </div> 
+    </div> 
 
-    <!-- Password Modal -->
-    <div id="passwordModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden-panel">
-        <div class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl w-full max-w-sm">
-            <h2 class="text-white font-bold mb-4 text-center">Admin Access Required</h2>
-            <input type="password" id="passwordInput" placeholder="Enter Password" class="w-full bg-slate-800 text-white p-3 rounded-lg mb-4 outline-none border border-white/5 focus:border-blue-500">
-            <div class="flex gap-2">
-                <button id="cancelBtn" class="flex-1 py-2 text-slate-400 text-sm hover:text-white">Cancel</button>
-                <button id="submitPassBtn" class="flex-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-bold">Unlock</button>
-            </div>
-            <p id="errorMsg" class="text-red-500 text-[10px] mt-2 text-center hidden">Incorrect password. Please try again.</p>
-        </div>
-    </div>
-
-    <!-- Protected Control Panel -->
-    <div id="adminPanel" class="control-panel bg-slate-900/95 p-6 rounded-2xl border border-white/10 w-full max-w-md text-white shadow-xl hidden-panel">
-        <div class="mb-4 flex items-center justify-between">
-            <div class="flex flex-col">
-                <h2 class="text-sm font-bold text-blue-400">ADMIN CONTROL PANEL</h2>
-                <button id="logoutBtn" class="text-[9px] text-slate-500 hover:text-red-400 text-left uppercase">Logout Session</button>
-            </div>
-            <span class="text-[9px] bg-blue-500/20 px-2 py-1 rounded text-blue-300">AUTHORIZED</span>
-        </div>
-
-        <div class="mb-6 space-y-3 bg-white/5 p-4 rounded-xl border border-white/5">
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 1 Name</label>
-                    <input type="text" id="inputTeam1" placeholder="Home" class="w-full bg-slate-800 border-none rounded p-2 text-sm outline-none focus:ring-1 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 2 Name</label>
-                    <input type="text" id="inputTeam2" placeholder="Away" class="w-full bg-slate-800 border-none rounded p-2 text-sm outline-none focus:ring-1 focus:ring-blue-500">
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="space-y-2">
-                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Home</p>
-                <div class="flex gap-1">
-                    <button id="btnHPlus" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button>
-                    <button id="btnHMinus" class="bg-slate-800 px-3 rounded-lg">-</button>
-                </div>
-                <button id="btnHServe" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button>
-            </div>
-            <div class="space-y-2">
-                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Away</p>
-                <div class="flex gap-1">
-                    <button id="btnAPlus" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button>
-                    <button id="btnAMinus" class="bg-slate-800 px-3 rounded-lg">-</button>
-                </div>
-                <button id="btnAServe" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button>
-            </div>
-        </div>
-
-        <div class="flex flex-col gap-2 pt-4 border-t border-white/5">
-            <button id="btnNextSet" class="w-full bg-yellow-600 hover:bg-yellow-500 py-3 rounded-lg font-bold text-xs uppercase">Next Set</button>
-            <button id="btnReset" class="bg-red-900/40 hover:bg-red-900/60 text-white text-[10px] uppercase font-bold py-2 rounded-lg transition-colors mt-2">Reset Match</button>
-        </div>
-    </div>
-
-    <!-- Viewer/Login Section -->
-    <div id="viewerSection" class="mt-4 flex flex-col items-center gap-4">
-        <div id="viewerBadge" class="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] text-slate-400 uppercase tracking-widest">
-            Viewer Mode: Read-Only
-        </div>
-        <button id="loginTriggerBtn" class="text-[10px] text-slate-500 hover:text-blue-400 uppercase tracking-widest border-b border-transparent hover:border-blue-400/30 transition-all">
-            Admin Login
+    <!-- Viewer Action -->
+    <div id="viewerSection">
+        <button id="loginTriggerBtn" class="bg-white/5 border border-white/10 px-8 py-3 rounded-full text-[10px] text-slate-500 hover:text-white uppercase tracking-[0.2em] font-bold">
+            Admin Access
         </button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    <!-- Password Modal -->
+    <div id="passwordModal" class="admin-modal-overlay">
+        <div class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl w-full max-w-sm m-4 text-white">
+            <h2 class="font-bold mb-4 text-center">Admin Access</h2>
+            <input type="password" id="passwordInput" placeholder="Password" class="w-full bg-slate-800 text-white p-3 rounded-lg mb-4 outline-none border border-white/10 focus:border-blue-500">
+            <div class="flex gap-2">
+                <button id="cancelBtn" class="flex-1 py-2 text-slate-400 hover:text-white text-sm">Cancel</button>
+                <button id="submitPassBtn" class="flex-[2] bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-bold text-sm">Login</button>
+            </div>
+            <p id="errorMsg" class="text-red-500 text-[10px] mt-3 text-center uppercase font-bold" style="display: none;">Access Denied</p>
+        </div>
+    </div>
 
-        // CONFIGURATION
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'vball-default';
-        const ADMIN_PASSWORD = "messen1933"; // <-- CHANGE YOUR PASSWORD HERE
-        
-        let IS_AUTHORIZED = sessionStorage.getItem('vball_admin_auth') === 'true';
+    <!-- Admin Control Panel --> 
+    <div id="adminPanel" class="bg-slate-900/95 p-6 rounded-2xl border border-white/10 w-full max-w-md text-white shadow-xl" style="display: none;"> 
+        <div class="flex justify-between items-center mb-6">
+            <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Match Controller</p> 
+            <button id="logoutBtn" class="text-[9px] text-slate-500 hover:text-red-400 uppercase font-bold">Log Out</button>
+        </div>
 
-        // STATE
-        let state = {
-            score1: 0, score2: 0, sets1: 0, sets2: 0, 
-            server: 0, team1Name: "Home", team2Name: "Away"
-        };
+        <div class="mb-6 space-y-3 bg-white/5 p-4 rounded-xl border border-white/5"> 
+            <div class="grid grid-cols-2 gap-3"> 
+                <div> 
+                    <label class="text-[9px] text-slate-500 uppercase block mb-1 font-bold">Team 1 Name</label> 
+                    <input type="text" id="inputTeam1" placeholder="Home" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"> 
+                </div> 
+                <div> 
+                    <label class="text-[9px] text-slate-500 uppercase block mb-1 font-bold">Team 2 Name</label> 
+                    <input type="text" id="inputTeam2" placeholder="Away" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none"> 
+                </div> 
+            </div> 
+        </div> 
 
-        // FIREBASE INIT
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        <div id="scoringControls" class="grid grid-cols-2 gap-4 mb-4"> 
+            <div class="space-y-2"> 
+                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Home</p> 
+                <div class="flex gap-1"> 
+                    <button id="hPlus" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button> 
+                    <button id="hMinus" class="bg-slate-800 px-3 rounded-lg">-</button> 
+                </div> 
+                <button id="serve1" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button> 
+            </div> 
+            <div class="space-y-2"> 
+                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Away</p> 
+                <div class="flex gap-1"> 
+                    <button id="aPlus" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button> 
+                    <button id="aMinus" class="bg-slate-800 px-3 rounded-lg">-</button> 
+                </div> 
+                <button id="serve2" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button> 
+            </div> 
+        </div> 
 
-        // UI ELEMENTS
+        <div class="flex flex-col gap-2 pt-4 border-t border-white/5"> 
+            <button id="btnNextSet" class="w-full bg-yellow-600 hover:bg-yellow-500 py-3 rounded-lg font-bold text-xs uppercase">Next Set</button> 
+            <button id="btnResetMatch" class="bg-red-900/40 hover:bg-red-900/60 text-white text-[10px] uppercase font-bold py-2 rounded-lg transition-colors mt-2">Reset Match</button> 
+        </div> 
+
+        <div class="mt-4 text-[9px] text-slate-500 text-center uppercase tracking-widest"> 
+            Cloud Sync Active | Keys: Q/A (H), W/S (A), 1/2 (Serve), N (Next Set) 
+        </div> 
+    </div> 
+
+    <!-- Firebase SDKs --> 
+    <script type="module"> 
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"; 
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"; 
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"; 
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCmz-qcfH3SY7GTEv1PZo2IwpmWHRnyC0c", 
+            authDomain: "volley-scoreboard-5d345.firebaseapp.com", 
+            projectId: "volley-scoreboard-5d345", 
+            storageBucket: "volley-scoreboard-5d345.firebasestorage.app", 
+            messagingSenderId: "1026855018988", 
+            appId: "1:1026855018988:web:d5236fcf4e347bea73e0c9" 
+        }; 
+
+        const appId = "match-001"; 
+        const ADMIN_PASSWORD = "messen1933";
+
+        let state = { 
+            score1: 0, score2: 0, sets1: 0, sets2: 0, currentSet: 1, 
+            server: 0, matchFinished: false, team1Name: "Home", team2Name: "Away" 
+        }; 
+
+        let user = null; 
+        let IS_AUTHORIZED = sessionStorage.getItem('vball_admin_authorized') === 'true';
+
+        const app = initializeApp(firebaseConfig); 
+        const auth = getAuth(app); 
+        const db = getFirestore(app); 
+
+        // UI Selectors
+        const modal = document.getElementById('passwordModal');
+        const passInput = document.getElementById('passwordInput');
+        const submitPassBtn = document.getElementById('submitPassBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const err = document.getElementById('errorMsg');
         const adminPanel = document.getElementById('adminPanel');
         const viewerSection = document.getElementById('viewerSection');
-        const passwordModal = document.getElementById('passwordModal');
-        const passwordInput = document.getElementById('passwordInput');
-        const errorMsg = document.getElementById('errorMsg');
-        const loginTriggerBtn = document.getElementById('loginTriggerBtn');
+        const triggerBtn = document.getElementById('loginTriggerBtn');
 
-        const init = async () => {
-            // RULE 3: Auth Before Queries
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+        // Initialize Auth
+        onAuthStateChanged(auth, (u) => { 
+            user = u; 
+            if (user) {
+                setupRealtimeSync();
+                if (IS_AUTHORIZED) showAdmin();
             }
+        }); 
 
-            onAuthStateChanged(auth, (user) => {
-                if (!user) return;
-                
-                if (IS_AUTHORIZED) {
-                    activateAdminMode();
-                }
+        const startApp = async () => { 
+            try { await signInAnonymously(auth); } catch (e) { console.error(e); } 
+        }; 
+        startApp(); 
 
-                // RULE 1: Strict Paths
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'match', 'state');
-                onSnapshot(docRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        state = { ...state, ...snapshot.data() };
-                        updateDisplay();
-                    } else if (IS_AUTHORIZED) {
-                        pushState();
-                    }
-                }, (err) => console.error("Firestore error:", err));
-            });
-        };
+        // Auth Logic
+        triggerBtn.onclick = () => { modal.style.display = 'flex'; passInput.focus(); };
+        cancelBtn.onclick = () => { modal.style.display = 'none'; err.style.display = 'none'; passInput.value = ''; };
+        submitPassBtn.onclick = handleAuth;
+        passInput.onkeydown = (e) => { if(e.key === 'Enter') handleAuth(); };
 
-        // AUTH LOGIC
-        loginTriggerBtn.onclick = () => {
-            passwordModal.classList.remove('hidden-panel');
-            passwordInput.focus();
-        };
+        function handleAuth() {
+            if (passInput.value === ADMIN_PASSWORD) {
+                IS_AUTHORIZED = true;
+                sessionStorage.setItem('vball_admin_authorized', 'true');
+                modal.style.display = 'none';
+                showAdmin();
+                pushState();
+            } else {
+                err.style.display = 'block';
+                passInput.value = '';
+            }
+        }
 
-        document.getElementById('submitPassBtn').onclick = checkPassword;
-        passwordInput.onkeypress = (e) => { if (e.key === 'Enter') checkPassword(); };
-        
-        document.getElementById('cancelBtn').onclick = () => {
-            passwordModal.classList.add('hidden-panel');
-            passwordInput.value = '';
-            errorMsg.classList.add('hidden');
-        };
+        function showAdmin() {
+            adminPanel.style.display = 'block';
+            viewerSection.style.display = 'none';
+            setupControls();
+        }
 
         document.getElementById('logoutBtn').onclick = () => {
-            sessionStorage.removeItem('vball_admin_auth');
+            sessionStorage.removeItem('vball_admin_authorized');
             window.location.reload();
         };
 
-        function checkPassword() {
-            if (passwordInput.value === ADMIN_PASSWORD) {
-                IS_AUTHORIZED = true;
-                sessionStorage.setItem('vball_admin_auth', 'true');
-                passwordModal.classList.add('hidden-panel');
-                activateAdminMode();
-                updateDisplay();
-                pushState(); // Sync initial state as admin if not exists
-            } else {
-                errorMsg.classList.remove('hidden');
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-        }
+        // Firestore Logic
+        function setupRealtimeSync() { 
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main'); 
+            onSnapshot(docRef, (snapshot) => { 
+                if (snapshot.exists()) { 
+                    state = { ...state, ...snapshot.data() }; 
+                    syncInputFields(); 
+                    updateDisplay(); 
+                } else if (IS_AUTHORIZED) { pushState(); } 
+            }, (error) => console.error(error)); 
+        } 
 
-        function activateAdminMode() {
-            adminPanel.classList.remove('hidden-panel');
-            viewerSection.classList.add('hidden-panel');
-            setupAdminListeners();
-        }
+        async function pushState() { 
+            if (!user || !IS_AUTHORIZED) return; 
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main'); 
+            try { await setDoc(docRef, state, { merge: true }); } catch (e) { console.error(e); } 
+        } 
 
-        // SHARED UPDATE LOGIC
-        function updateDisplay() {
-            document.getElementById('displayTeam1').innerText = state.team1Name;
-            document.getElementById('displayTeam2').innerText = state.team2Name;
-            document.getElementById('score1').innerText = state.score1;
-            document.getElementById('score2').innerText = state.score2;
-            document.getElementById('sets1').innerText = state.sets1;
-            document.getElementById('sets2').innerText = state.sets2;
+        // Controls Logic
+        function setupControls() {
+            document.getElementById('inputTeam1').oninput = (e) => { state.team1Name = e.target.value || "Home"; updateDisplay(); pushState(); };
+            document.getElementById('inputTeam2').oninput = (e) => { state.team2Name = e.target.value || "Away"; updateDisplay(); pushState(); };
             
-            document.getElementById('service1').className = `service-dot rounded-full ${state.server === 1 ? 'serving' : 'bg-white/5'}`;
-            document.getElementById('service2').className = `service-dot rounded-full ${state.server === 2 ? 'serving' : 'bg-white/5'}`;
-
-            if (IS_AUTHORIZED) {
-                if (document.activeElement.id !== 'inputTeam1') document.getElementById('inputTeam1').value = state.team1Name;
-                if (document.activeElement.id !== 'inputTeam2') document.getElementById('inputTeam2').value = state.team2Name;
-            }
-        }
-
-        async function pushState() {
-            if (!IS_AUTHORIZED || !auth.currentUser) return;
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'match', 'state');
-            try {
-                await setDoc(docRef, state, { merge: true });
-            } catch (e) { console.error("Save error:", e); }
-        }
-
-        function setupAdminListeners() {
-            const updateField = (field, val) => { state[field] = val; pushState(); };
+            document.getElementById('hPlus').onclick = () => changeScore(1, 1);
+            document.getElementById('hMinus').onclick = () => changeScore(1, -1);
+            document.getElementById('aPlus').onclick = () => changeScore(2, 1);
+            document.getElementById('aMinus').onclick = () => changeScore(2, -1);
             
-            document.getElementById('inputTeam1').oninput = (e) => updateField('team1Name', e.target.value || "Home");
-            document.getElementById('inputTeam2').oninput = (e) => updateField('team2Name', e.target.value || "Away");
-
-            document.getElementById('btnHPlus').onclick = () => { state.score1++; state.server = 1; pushState(); };
-            document.getElementById('btnHMinus').onclick = () => { state.score1 = Math.max(0, state.score1 - 1); pushState(); };
-            document.getElementById('btnAPlus').onclick = () => { state.score2++; state.server = 2; pushState(); };
-            document.getElementById('btnAMinus').onclick = () => { state.score2 = Math.max(0, state.score2 - 1); pushState(); };
+            document.getElementById('serve1').onclick = () => toggleService(1);
+            document.getElementById('serve2').onclick = () => toggleService(2);
             
-            document.getElementById('btnHServe').onclick = () => { state.server = (state.server === 1 ? 0 : 1); pushState(); };
-            document.getElementById('btnAServe').onclick = () => { state.server = (state.server === 2 ? 0 : 2); pushState(); };
-
-            document.getElementById('btnNextSet').onclick = () => {
-                if (state.score1 > state.score2) state.sets1++;
-                else if (state.score2 > state.score1) state.sets2++;
-                state.score1 = 0; state.score2 = 0; state.server = 0;
-                pushState();
-            };
-
-            document.getElementById('btnReset').onclick = () => {
-                state = { score1: 0, score2: 0, sets1: 0, sets2: 0, server: 0, team1Name: "Home", team2Name: "Away" };
-                pushState();
-            };
-
-            window.onkeydown = (e) => {
-                if (document.activeElement.tagName === 'INPUT' || !IS_AUTHORIZED) return;
-                const k = e.key.toLowerCase();
-                if (k === 'q') document.getElementById('btnHPlus').click();
-                if (k === 'a') document.getElementById('btnHMinus').click();
-                if (k === 'w') document.getElementById('btnAPlus').click();
-                if (k === 's') document.getElementById('btnAMinus').click();
-                if (k === 'n') document.getElementById('btnNextSet').click();
-            };
+            document.getElementById('btnNextSet').onclick = () => nextSet();
+            document.getElementById('btnResetMatch').onclick = () => resetMatch();
         }
 
-        init();
-    </script>
-</body>
+        function changeScore(team, delta) { 
+            if (state.matchFinished && delta > 0) return; 
+            if (team === 1) { 
+                state.score1 = Math.max(0, state.score1 + delta); 
+                if (delta > 0) state.server = 1; 
+            } else { 
+                state.score2 = Math.max(0, state.score2 + delta); 
+                if (delta > 0) state.server = 2; 
+            } 
+            updateDisplay(); 
+            pushState(); 
+        } 
+
+        function toggleService(team) { 
+            state.server = (state.server === team) ? 0 : team; 
+            updateDisplay(); 
+            pushState(); 
+        } 
+
+        function nextSet() { 
+            if (state.score1 > state.score2) state.sets1++; 
+            else if (state.score2 > state.score1) state.sets2++; 
+            state.score1 = 0; state.score2 = 0; 
+            state.currentSet++; state.server = 0; 
+            updateDisplay(); 
+            pushState(); 
+        } 
+
+        function resetMatch() { 
+            if(!confirm("Reset match completely?")) return;
+            state = { 
+                score1: 0, score2: 0, sets1: 0, sets2: 0, currentSet: 1, 
+                server: 0, matchFinished: false, team1Name: "Home", team2Name: "Away" 
+            }; 
+            updateDisplay(); syncInputFields(); pushState(); 
+        } 
+
+        function syncInputFields() { 
+            const iT1 = document.getElementById('inputTeam1'); 
+            const iT2 = document.getElementById('inputTeam2'); 
+            if (iT1 && document.activeElement !== iT1) iT1.value = state.team1Name; 
+            if (iT2 && document.activeElement !== iT2) iT2.value = state.team2Name; 
+        } 
+
+        function updateDisplay() { 
+            const s1 = document.getElementById('score1'); 
+            const s2 = document.getElementById('score2'); 
+            if (!s1 || !s2) return; 
+            document.getElementById('displayTeam1').innerText = state.team1Name; 
+            document.getElementById('displayTeam2').innerText = state.team2Name; 
+            s1.innerText = state.score1.toString(); 
+            s2.innerText = state.score2.toString(); 
+            document.getElementById('sets1').innerText = state.sets1; 
+            document.getElementById('sets2').innerText = state.sets2; 
+            document.getElementById('service1').className = `service-dot rounded-full ${state.server === 1 ? 'serving' : 'bg-white/5'}`; 
+            document.getElementById('service2').className = `service-dot rounded-full ${state.server === 2 ? 'serving' : 'bg-white/5'}`; 
+        } 
+
+        // Shortcuts
+        window.addEventListener('keydown', (e) => { 
+            if (!IS_AUTHORIZED || document.activeElement.tagName === 'INPUT') return; 
+            const key = e.key.toLowerCase(); 
+            if (key === 'q') changeScore(1, 1); 
+            if (key === 'a') changeScore(1, -1); 
+            if (key === 'w') changeScore(2, 1); 
+            if (key === 's') changeScore(2, -1); 
+            if (key === '1') toggleService(1); 
+            if (key === '2') toggleService(2); 
+            if (key === 'n') nextSet(); 
+        }); 
+    </script> 
+</body> 
 </html>
