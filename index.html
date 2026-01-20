@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Volleyball - Full Sync & Scale</title>
+    <title>Pro Volleyball Scoreboard - Service Relocated</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Barlow+Condensed:wght@700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --navy-dark: #0a192f;
@@ -13,118 +13,146 @@
             --gold: #fbbf24;
         }
         body {
-            font-family: 'Oswald', sans-serif;
-            background-color: transparent;
-            color: white;
-            transition: background-color 0.5s ease;
+            font-family: 'Inter', sans-serif;
+            background-color: transparent; 
+            min-height: 100vh;
         }
-        .score-font { font-family: 'JetBrains Mono', monospace; }
-        .team-font { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; }
-
-        /* --- FLUID SCALING SYSTEM --- */
-        .main-wrapper { width: 100%; max-width: 1100px; margin: 0 auto; }
         
-        /* Desktop (OBS / Large Screen) */
-        .row-height { height: 130px; }
-        .text-team { font-size: 5rem; }
-        .text-sets { font-size: 5.5rem; }
-        .text-score { font-size: 8rem; }
-        .box-sets { width: 130px; }
-        .box-score { width: 230px; }
-
-        /* Mobile (Smartphone) */
-        @media (max-width: 768px) {
-            .row-height { height: 65px; }
-            .text-team { font-size: 1.6rem; }
-            .text-sets { font-size: 1.8rem; }
-            .text-score { font-size: 2.8rem; }
-            .box-sets { width: 60px; }
-            .box-score { width: 95px; }
-            .service-dot { width: 10px !important; height: 10px !important; }
+        .score-font {
+            font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
         }
 
+        .team-name-display {
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            line-height: 0.85;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
         .navy-bg { background-color: var(--navy-dark); }
         .navy-accent { background-color: var(--navy-medium); }
-        .serving { background-color: var(--gold) !important; box-shadow: 0 0 20px var(--gold); }
-        
-        /* Utility */
-        .overlay-mode .control-panel { display: none !important; }
-        .sync-active { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+
+        .service-dot {
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .serving {
+            background-color: var(--gold) !important;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        .set-score {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        /* Tablet/Desktop: Large Scoreboard */
+        @media (min-width: 768px) {
+            .main-wrapper { max-width: 54rem; } 
+            .team-name-display { font-size: 3.5rem; } 
+            .score-cell { width: 9rem; height: 7.5rem; }
+            .set-cell { width: 5.5rem; height: 7.5rem; }
+            .score-font { font-size: 5rem; } 
+            .set-score { font-size: 3rem; }
+            .service-dot { width: 1.5rem; height: 1.5rem; margin-left: 1.5rem; }
+        }
+
+        /* Mobile: Compact */
+        @media (max-width: 767px) {
+            .main-wrapper { max-width: 100%; }
+            .team-name-display { font-size: 1.5rem; }
+            .score-cell { width: 4.5rem; height: 4.5rem; }
+            .set-cell { width: 3rem; height: 4.5rem; }
+            .score-font { font-size: 2.25rem; }
+            .set-score { font-size: 1.5rem; }
+            .service-dot { width: 0.75rem; height: 0.75rem; margin-left: 0.75rem; }
+        }
     </style>
 </head>
-<body class="p-2 md:p-6 flex flex-col items-center">
+<body class="p-4 md:p-6 flex flex-col items-center justify-start">
 
-    <div id="mainWrapper" class="main-wrapper shadow-2xl rounded-xl overflow-hidden border border-white/10">
+    <!-- Refined Scoreboard Wrapper -->
+    <div id="mainWrapper" class="main-wrapper w-full shadow-2xl rounded-2xl overflow-hidden mb-8 border border-white/10">
         
-
-        <div class="navy-bg flex items-center border-b border-white/5 row-height relative">
-            <div class="flex-1 px-4 md:px-8">
-                <div id="syncDot" class="w-2 h-2 rounded-full bg-red-500 transition-all duration-500"></div>
-                <div id="displayTeam1" class="team-font text-team uppercase truncate leading-none">HOME</div>
+        <!-- Team 1 Row -->
+        <div class="navy-bg flex items-center border-b border-white/10 relative">
+            <div class="flex-1 px-4 md:px-6 py-2 md:py-4 flex items-center overflow-hidden">
+                <div id="displayTeam1" class="text-white team-name-display uppercase truncate">NAVY TEAM</div>
+                <div id="service1" class="service-dot rounded-full bg-white/5"></div>
             </div>
-            <div class="box-sets h-full flex items-center justify-center border-l border-white/10 navy-accent">
-                <span id="sets1" class="text-yellow-500 font-black text-sets">0</span>
+            <div class="set-cell flex items-center justify-center border-l border-white/10 navy-accent">
+                <span id="sets1" class="set-score">0</span>
             </div>
-            <div class="box-score h-full flex items-center justify-center border-l border-white/10 navy-accent relative">
-                <span id="score1" class="score-font font-black text-score leading-none">00</span>
-                <div id="service1" class="service-dot absolute right-2 top-2 md:right-4 md:top-4 w-6 h-6 rounded-full bg-white/5 transition-all"></div>
+            <div id="pointBox1" class="score-cell flex items-center justify-center border-l border-white/10 navy-accent">
+                <span id="score1" class="score-font text-white">0</span>
             </div>
         </div>
 
-        <div class="navy-bg flex items-center row-height relative">
-            <div class="flex-1 px-4 md:px-8">
-                <div id="displayTeam2" class="team-font text-team uppercase truncate leading-none">AWAY</div>
+        <!-- Team 2 Row -->
+        <div class="navy-bg flex items-center relative">
+            <div class="flex-1 px-4 md:px-6 py-2 md:py-4 flex items-center overflow-hidden">
+                <div id="displayTeam2" class="text-white team-name-display uppercase truncate">OPPONENTS</div>
+                <div id="service2" class="service-dot rounded-full bg-white/5"></div>
             </div>
-            <div class="box-sets h-full flex items-center justify-center border-l border-white/10 navy-accent">
-                <span id="sets2" class="text-yellow-500 font-black text-sets">0</span>
+            <div class="set-cell flex items-center justify-center border-l border-white/10 navy-accent">
+                <span id="sets2" class="set-score">0</span>
             </div>
-            <div class="box-score h-full flex items-center justify-center border-l border-white/10 navy-accent relative">
-                <span id="score2" class="score-font font-black text-score leading-none">00</span>
-                <div id="service2" class="service-dot absolute right-2 top-2 md:right-4 md:top-4 w-6 h-6 rounded-full bg-white/5 transition-all"></div>
+            <div id="pointBox2" class="score-cell flex items-center justify-center border-l border-white/10 navy-accent">
+                <span id="score2" class="score-font text-white">0</span>
             </div>
         </div>
     </div>
 
-    <div class="control-panel w-full max-w-2xl mt-8 bg-slate-900/95 p-6 rounded-2xl border border-white/10 shadow-2xl">
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 uppercase font-bold">Home Team Name</label>
-                <input type="text" id="inputTeam1" placeholder="HOME" oninput="pushSettings()" class="w-full bg-slate-800 p-3 rounded-lg text-sm outline-none border border-white/5 focus:border-blue-500">
-            </div>
-            <div class="space-y-1">
-                <label class="text-[10px] text-slate-500 uppercase font-bold">Away Team Name</label>
-                <input type="text" id="inputTeam2" placeholder="AWAY" oninput="pushSettings()" class="w-full bg-slate-800 p-3 rounded-lg text-sm outline-none border border-white/5 focus:border-blue-500">
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-6">
-            <div class="space-y-3">
-                <div class="flex gap-2">
-                    <button onclick="changeScore(1, 1)" class="flex-1 bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-3xl shadow-lg active:scale-95 transition-all">PT +</button>
-                    <button onclick="changeScore(1, -1)" class="px-5 bg-slate-700 hover:bg-slate-600 rounded-2xl font-bold text-xl">-</button>
-                </div>
-                <button onclick="toggleService(1)" class="w-full py-2 border border-yellow-500/40 rounded-xl text-yellow-500 text-xs font-black uppercase tracking-widest">Mark Serve</button>
-            </div>
-            <div class="space-y-3">
-                <div class="flex gap-2">
-                    <button onclick="changeScore(2, 1)" class="flex-1 bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-3xl shadow-lg active:scale-95 transition-all">PT +</button>
-                    <button onclick="changeScore(2, -1)" class="px-5 bg-slate-700 hover:bg-slate-600 rounded-2xl font-bold text-xl">-</button>
-                </div>
-                <button onclick="toggleService(2)" class="w-full py-2 border border-yellow-500/40 rounded-xl text-yellow-500 text-xs font-black uppercase tracking-widest">Mark Serve</button>
-            </div>
-        </div>
-
-        <div class="flex gap-3 mt-8">
-            <button onclick="nextSet()" class="flex-1 bg-yellow-600 hover:bg-yellow-500 py-4 rounded-xl font-black text-sm tracking-tighter">WIN SET / NEXT</button>
-            <button onclick="toggleOverlay()" id="overlayBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-black text-sm tracking-tighter">OBS OVERLAY MODE</button>
-        </div>
+    <!-- Control Panel -->
+    <div class="control-panel bg-slate-900/95 p-6 rounded-2xl border border-white/10 w-full max-w-md text-white shadow-xl">
         
-        <div class="mt-6 pt-4 border-t border-white/5 flex justify-between items-center">
-             <button onclick="resetMatch()" class="text-[10px] text-red-500/70 hover:text-red-500 font-bold uppercase tracking-widest transition-colors">Hard Reset Match</button>
-             <span class="text-[9px] text-slate-600 font-mono">ID: match-001</span>
+        <div class="mb-6 space-y-3 bg-white/5 p-4 rounded-xl border border-white/5">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Match Settings</p>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 1 Name</label>
+                    <input type="text" id="inputTeam1" placeholder="NAVY TEAM" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 2 Name</label>
+                    <input type="text" id="inputTeam2" placeholder="OPPONENTS" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <div id="scoringControls" class="grid grid-cols-2 gap-4 mb-4">
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Home</p>
+                <div class="flex gap-1">
+                    <button onclick="changeScore(1, 1)" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button>
+                    <button onclick="changeScore(1, -1)" class="bg-slate-800 px-3 rounded-lg">-</button>
+                </div>
+                <button onclick="toggleService(1)" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-slate-500 uppercase text-center">Away</p>
+                <div class="flex gap-1">
+                    <button onclick="changeScore(2, 1)" class="bg-blue-600 hover:bg-blue-500 flex-1 py-3 rounded-lg font-bold">Pt +</button>
+                    <button onclick="changeScore(2, -1)" class="bg-slate-800 px-3 rounded-lg">-</button>
+                </div>
+                <button onclick="toggleService(2)" class="w-full py-2 text-xs border border-yellow-500/30 rounded-lg text-yellow-500 uppercase font-black">Manual Serve</button>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2 pt-4 border-t border-white/5">
+            <button onclick="nextSet()" class="w-full bg-yellow-600 hover:bg-yellow-500 py-3 rounded-lg font-bold text-xs uppercase">Next Set</button>
+            <button onclick="resetMatch()" class="bg-red-900/40 hover:bg-red-900/60 text-white text-[10px] uppercase font-bold py-2 rounded-lg transition-colors mt-2">Reset Match</button>
+        </div>
+
+        <div class="mt-4 text-[9px] text-slate-500 text-center uppercase tracking-widest">
+            Cloud Sync Active | Keys: Q/A (H), W/S (A), 1/2 (Serve), N (Next Set)
         </div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -140,120 +168,124 @@
         };
 
         const appId = "match-001";
-        let state = { 
-            score1: 0, score2: 0, sets1: 0, sets2: 0, 
-            currentSet: 1, server: 0, matchFinished: false,
-            matchTitle: "EASYLEAGUE BERN-SOLOTHURN", 
-            team1Name: "HOME", team2Name: "AWAY" 
+
+        let state = {
+            score1: 0, score2: 0, sets1: 0, sets2: 0, currentSet: 1,
+            server: 0, matchFinished: false, team1Name: "Home", team2Name: "Away"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
         let user = null;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // Firebase Auth & Sync
-        onAuthStateChanged(auth, (u) => { 
-            if(u) {
-                user = u;
-                document.getElementById('syncDot').classList.add('sync-active');
-                setupSync(); 
-            }
+        updateDisplay();
+
+        onAuthStateChanged(auth, (u) => {
+            user = u;
+            if (user) setupRealtimeSync();
         });
-        signInAnonymously(auth);
 
-        function setupSync() {
-            onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main'), (snap) => {
-                if(snap.exists()) { 
-                    state = snap.data(); 
-                    updateDisplay(); 
+        const startApp = async () => {
+            try { await signInAnonymously(auth); } catch (e) { console.error(e); }
+        };
+        startApp();
+
+        function setupRealtimeSync() {
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main');
+            onSnapshot(docRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    state = { ...state, ...snapshot.data() };
                     syncInputFields();
-                }
-            });
+                    updateDisplay();
+                } else { pushState(); }
+            }, (error) => console.error(error));
         }
 
-        async function pushState() { 
-            if(!user) return;
-            try {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main'), state, { merge: true }); 
-            } catch(e) { console.error("Sync error", e); }
+        async function pushState() {
+            if (!user) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'scoreboard', 'main');
+            try { await setDoc(docRef, state, { merge: true }); } catch (e) { console.error(e); }
         }
 
-        // Logic Functions
-        window.changeScore = (team, delta) => {
-            if(team === 1) { 
-                state.score1 = Math.max(0, state.score1 + delta); 
-                if(delta > 0) state.server = 1;
-            } else { 
-                state.score2 = Math.max(0, state.score2 + delta); 
-                if(delta > 0) state.server = 2;
+        window.pushSettings = function() {
+            state.team1Name = document.getElementById('inputTeam1').value || "Home";
+            state.team2Name = document.getElementById('inputTeam2').value || "Away";
+            updateDisplay();
+            pushState();
+        };
+
+        window.changeScore = function(team, delta) {
+            if (state.matchFinished && delta > 0) return;
+            if (team === 1) {
+                state.score1 = Math.max(0, state.score1 + delta);
+                if (delta > 0) state.server = 1;
+            } else {
+                state.score2 = Math.max(0, state.score2 + delta);
+                if (delta > 0) state.server = 2;
             }
             updateDisplay();
             pushState();
         };
 
-        window.toggleService = (team) => {
+        window.toggleService = function(team) {
             state.server = (state.server === team) ? 0 : team;
             updateDisplay();
             pushState();
         };
 
-        window.nextSet = () => {
-            if(state.score1 > state.score2) state.sets1++;
-            else if(state.score2 > state.score1) state.sets2++;
-            
+        window.nextSet = function() {
+            if (state.score1 > state.score2) state.sets1++;
+            else if (state.score2 > state.score1) state.sets2++;
             state.score1 = 0; state.score2 = 0;
-            state.currentSet++;
-            state.server = 0;
+            state.currentSet++; state.server = 0;
             updateDisplay();
             pushState();
         };
 
-        window.resetMatch = () => {
-            if(!confirm("Reset everything?")) return;
-            state = { 
-                score1: 0, score2: 0, sets1: 0, sets2: 0, 
-                currentSet: 1, server: 0, matchFinished: false,
-                matchTitle: "EASYLEAGUE BERN-SOLOTHURN", 
-                team1Name: "HOME", team2Name: "AWAY" 
+        window.resetMatch = function() {
+            state = {
+                score1: 0, score2: 0, sets1: 0, sets2: 0, currentSet: 1,
+                server: 0, matchFinished: false, team1Name: "NAVY TEAM", team2Name: "OPPONENTS"
             };
-            updateDisplay();
-            pushState();
-        };
-
-        window.pushSettings = () => {
-            state.team1Name = document.getElementById('inputTeam1').value || "HOME";
-            state.team2Name = document.getElementById('inputTeam2').value || "AWAY";
-            updateDisplay();
-            pushState();
-        };
-
-        window.toggleOverlay = () => {
-            document.body.classList.toggle('overlay-mode');
-            const isOverlay = document.body.classList.contains('overlay-mode');
-            document.getElementById('overlayBtn').innerText = isOverlay ? "EXIT OVERLAY" : "OBS OVERLAY MODE";
+            updateDisplay(); syncInputFields(); pushState();
         };
 
         function syncInputFields() {
-            const i1 = document.getElementById('inputTeam1');
-            const i2 = document.getElementById('inputTeam2');
-            if(document.activeElement !== i1) i1.value = state.team1Name;
-            if(document.activeElement !== i2) i2.value = state.team2Name;
+            const iT1 = document.getElementById('inputTeam1');
+            const iT2 = document.getElementById('inputTeam2');
+            if (iT1 && document.activeElement !== iT1) iT1.value = state.team1Name;
+            if (iT2 && document.activeElement !== iT2) iT2.value = state.team2Name;
         }
 
         function updateDisplay() {
+            const s1 = document.getElementById('score1');
+            const s2 = document.getElementById('score2');
+            if (!s1 || !s2) return;
             document.getElementById('displayTeam1').innerText = state.team1Name;
             document.getElementById('displayTeam2').innerText = state.team2Name;
-            document.getElementById('score1').innerText = state.score1.toString().padStart(2, '0');
-            document.getElementById('score2').innerText = state.score2.toString().padStart(2, '0');
+            
+            s1.innerText = state.score1.toString();
+            s2.innerText = state.score2.toString();
+            
             document.getElementById('sets1').innerText = state.sets1;
             document.getElementById('sets2').innerText = state.sets2;
-            document.getElementById('setInfo').innerText = state.currentSet;
             
-            document.getElementById('service1').className = `service-dot absolute right-2 top-2 md:right-4 md:top-4 w-6 h-6 rounded-full transition-all duration-300 ${state.server === 1 ? 'serving' : 'bg-white/5'}`;
-            document.getElementById('service2').className = `service-dot absolute right-2 top-2 md:right-4 md:top-4 w-6 h-6 rounded-full transition-all duration-300 ${state.server === 2 ? 'serving' : 'bg-white/5'}`;
+            document.getElementById('service1').className = `service-dot rounded-full ${state.server === 1 ? 'serving' : 'bg-white/5'}`;
+            document.getElementById('service2').className = `service-dot rounded-full ${state.server === 2 ? 'serving' : 'bg-white/5'}`;
         }
+
+        window.addEventListener('keydown', (e) => {
+            if (document.activeElement.tagName === 'INPUT') return;
+            const key = e.key.toLowerCase();
+            if (key === 'q') changeScore(1, 1);
+            if (key === 'a') changeScore(1, -1);
+            if (key === 'w') changeScore(2, 1);
+            if (key === 's') changeScore(2, -1);
+            if (key === '1') toggleService(1);
+            if (key === '2') toggleService(2);
+            if (key === 'n') nextSet();
+        });
     </script>
 </body>
 </html>
-
