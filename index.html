@@ -114,11 +114,11 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 1 Name</label>
-                    <input type="text" id="inputTeam1" placeholder="NAVY TEAM" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                    <input type="text" id="inputTeam1" placeholder="Home" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
                     <label class="text-[9px] text-slate-500 uppercase block mb-1">Team 2 Name</label>
-                    <input type="text" id="inputTeam2" placeholder="OPPONENTS" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                    <input type="text" id="inputTeam2" placeholder="Away" oninput="pushSettings()" class="w-full bg-slate-800 border-none rounded p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
                 </div>
             </div>
         </div>
@@ -246,7 +246,7 @@
         window.resetMatch = function() {
             state = {
                 score1: 0, score2: 0, sets1: 0, sets2: 0, currentSet: 1,
-                server: 0, matchFinished: false, team1Name: "", team2Name: ""
+                server: 0, matchFinished: false, team1Name: "Home", team2Name: "Away"
             };
             updateDisplay(); syncInputFields(); pushState();
         };
@@ -289,5 +289,6 @@
     </script>
 </body>
 </html>
+
 
 
